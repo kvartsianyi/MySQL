@@ -73,12 +73,27 @@
 # LIMIT 1;
 
 # 17.  Усім клієнтам, які мають вищу освіту, встановити усі їхні кредити у розмірі 6000 грн.
+# UPDATE application
+#     JOIN client c ON application.Client_idClient = c.idClient
+# SET Sum = 6000
+# WHERE Education = 'high';
 
 # 18.  Усіх клієнтів київських відділень пересилити до Києва.
+# UPDATE client
+#     JOIN department d on client.Department_idDepartment = d.idDepartment
+# SET City = 'Kyiv'
+# WHERE DepartmentCity = 'Kyiv';
 
 # 19.  Видалити усі кредити, які є повернені.
+# DELETE FROM application WHERE CreditState = 'Returned';
 
 # 20.  Видалити кредити клієнтів, в яких друга літера прізвища є голосною.
+# ????????????????????????????????????????????????????????????????????????????????
+# SELECT * FROM application a
+#     JOIN client c on a.Client_idClient = c.idClient
+# WHERE c.LastName LIKE '_o%' OR '_e%';
+# '_a%' OR '_e%' OR '_i%' OR '_o%' OR '_u%';
+
 
 # 21.  Знайти львівські відділення, які видали кредитів на загальну суму більше ніж 5000.
 
