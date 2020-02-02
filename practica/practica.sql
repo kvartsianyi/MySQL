@@ -88,22 +88,54 @@
 # DELETE FROM application WHERE CreditState = 'Returned';
 
 # 20.  Видалити кредити клієнтів, в яких друга літера прізвища є голосною.
-# ????????????????????????????????????????????????????????????????????????????????
-# SELECT * FROM application a
-#     JOIN client c on a.Client_idClient = c.idClient
-# WHERE c.LastName LIKE '_o%' OR '_e%';
-# '_a%' OR '_e%' OR '_i%' OR '_o%' OR '_u%';
+# ?????????????????????????????????? Kostilno
+# DELETE application FROM application
+#     JOIN client c ON application.Client_idClient = c.idClient
+# WHERE LastName LIKE '_a%' OR LastName LIKE '_e%' OR LastName LIKE '_i%' OR LastName LIKE '_o%' OR LastName LIKE '_u%';
 
 
 # 21.  Знайти львівські відділення, які видали кредитів на загальну суму більше ніж 5000.
+# Тут селект в селекті.
+# Внутрішній селект вибирає загальну суму по відділеннях.
+# Зовнішній вибирає з тої вибірки тільки ті відділення, які відповідають умові.
+
+# SELECT * FROM (
+#         SELECT d.*, SUM(Sum) AS GeneralSum FROM application a
+#         JOIN client c on a.Client_idClient = c.idClient
+#         JOIN department d on c.Department_idDepartment = d.idDepartment
+#     GROUP BY idDepartment, DepartmentCity, CountOfWorkers
+#     ) AS LvivDepartments
+# WHERE DepartmentCity = 'Lviv' AND GeneralSum > 5000;
+
 
 # 22.  Знайти клієнтів, які повністю погасили кредити на суму більше ніж 5000.
+# Тут у внутрішньому селекті рахуємо суму тільки тих кредитів, які були повернуті.
+# Зовнішнім селектом відсіюємо ті, що не відповідають умові
+
+# SELECT * FROM (
+#          SELECT c.idClient, c.FirstName, c.LastName, SUM(Sum) AS CreditsSum
+#          FROM application a
+#                   JOIN client c on a.Client_idClient = c.idClient
+#          WHERE CreditState = 'Returned'
+#          GROUP BY idClient, FirstName, LastName
+#      ) AS GoodClients
+# WHERE CreditsSum > 5000;
+
 
 # 23.  Знайти максимальний неповернений кредит.
+# SELECT * FROM application
+# WHERE CreditState = 'Not returned'
+# ORDER BY Sum DESC LIMIT 1;
 
 # 24.  Знайти клієнта, сума кредиту якого найменша.
+# SELECT c.idClient, c.FirstName, c.LastName, SUM(Sum) AS MinCredit FROM application a
+#     JOIN client c on a.Client_idClient = c.idClient
+# GROUP BY idClient, FirstName, LastName
+# ORDER BY MinCredit
+# LIMIT 1;
 
 # 25.  Знайти кредити, сума яких більша за середнє значення усіх кредитів.
+
 
 # 26.  Знайти клієнтів, які є з того самого міста, що і клієнт, який взяв найбільшу кількість кредитів.
 
