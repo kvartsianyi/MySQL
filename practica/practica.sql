@@ -135,10 +135,39 @@
 # LIMIT 1;
 
 # 25.  Знайти кредити, сума яких більша за середнє значення усіх кредитів.
+# SELECT AVG(Sum) FROM application; <--- повертає одне значення
 
+# SELECT * FROM application
+# WHERE Sum > (SELECT AVG(Sum) FROM application);
 
 # 26.  Знайти клієнтів, які є з того самого міста, що і клієнт, який взяв найбільшу кількість кредитів.
+# Тут спочатку шукаєм клієнта, який взяв найбільшу кількість кредитів.
+# Потім витягуєм його місто
+# Потім вибираєм всіх клієнтів з того ж міста
+
+# SELECT idClient, FirstName, LastName, City FROM client c
+# WHERE City = (SELECT City FROM (
+#                                 SELECT COUNT(Client_idClient) AS CreditsCount, idClient, City FROM application a
+#                                     JOIN client c on a.Client_idClient = c.idClient
+#                                 GROUP BY idClient
+#                                 ORDER BY CreditsCount DESC
+#                                 LIMIT 1
+#                                    ) AS MaxCountCreditClient);
 
 # 27.  Max sum.
+# SELECT MaxSum FROM (
+#     SELECT SUM(Sum) AS MaxSum, idApplication FROM application
+#     GROUP BY idApplication
+#     ORDER BY MaxSum DESC
+#     LIMIT 1
+#     ) AS Sum;
 
 # 28.  Місто чувака який набрав найбільше кредитів.
+SELECT City FROM (
+    SELECT COUNT(Client_idClient) AS CreditsCount, idClient, City FROM application a
+        JOIN client c on a.Client_idClient = c.idClient
+    GROUP BY idClient, City
+    ORDER BY CreditsCount DESC
+    LIMIT 1
+    ) AS ClientMaxCreditsCount;
+
