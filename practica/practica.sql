@@ -88,10 +88,13 @@
 # DELETE FROM application WHERE CreditState = 'Returned';
 
 # 20.  Видалити кредити клієнтів, в яких друга літера прізвища є голосною.
-# ?????????????????????????????????? Kostilno
+# ???????????????? Kostil
 # DELETE application FROM application
 #     JOIN client c ON application.Client_idClient = c.idClient
 # WHERE LastName LIKE '_a%' OR LastName LIKE '_e%' OR LastName LIKE '_i%' OR LastName LIKE '_o%' OR LastName LIKE '_u%';
+
+# Або так
+# WHERE SUBSTRING(LastName, 2, 1) in ('a','e','i','o','u');
 
 
 # 21.  Знайти львівські відділення, які видали кредитів на загальну суму більше ніж 5000.
@@ -163,11 +166,11 @@
 #     ) AS Sum;
 
 # 28.  Місто чувака який набрав найбільше кредитів.
-SELECT City FROM (
-    SELECT COUNT(Client_idClient) AS CreditsCount, idClient, City FROM application a
-        JOIN client c on a.Client_idClient = c.idClient
-    GROUP BY idClient, City
-    ORDER BY CreditsCount DESC
-    LIMIT 1
-    ) AS ClientMaxCreditsCount;
+# SELECT City FROM (
+#     SELECT COUNT(Client_idClient) AS CreditsCount, idClient, City FROM application a
+#         JOIN client c on a.Client_idClient = c.idClient
+#     GROUP BY idClient, City
+#     ORDER BY CreditsCount DESC
+#     LIMIT 1
+#     ) AS ClientMaxCreditsCount;
 
